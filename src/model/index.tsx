@@ -1,25 +1,25 @@
 import {Modal} from 'antd';
 import React ,{useRef} from 'react';
 import MyForm from './MyForm'
-// const [visible, setState] = useState(false);
 
 interface IItem { 
 	age: number,
-  firstName: string,
-  lastName: string,
+  username: string,
   address:string,
   tags:string[]
 }
 interface IPros{
   visible:boolean,
  uncommit:any,
- myform:IItem
+ myform:IItem,
+ adddata:(val:any)=>void
 }
 const MYModal=(props:IPros)=>{
   const childRef:any = useRef();
   const handleOk=(e:any)=>{
-    props.uncommit()
-    childRef.current.focus()
+   const data= childRef.current.focus()
+   props.adddata(data)
+   props.uncommit()
   }
   const handleCancel=(e:any)=>{
     props.uncommit()

@@ -1,34 +1,29 @@
 import { Form, Input, Select } from 'antd'
-import React ,{useImperativeHandle,useRef}from 'react';
-
-interface IProps{
-  form:any,
-  cRef:any
+import { FormComponentProps } from 'antd/es/form';
+import React ,{useImperativeHandle}from 'react';
+interface IUserFormProps extends FormComponentProps {
+  cRef:any,
+  form:any
 }
 const Option = Select.Option
-const MyForm:any = (props: IProps) => {
-  const inputRef:any = useRef();
+const MyForm = (props: IUserFormProps) => {
   useImperativeHandle(props.cRef, () => ({
     focus: () => {
-      alert(1)
-      inputRef.current.focus();
+      const regInfo = getFieldsValue();
+      return regInfo
     }
   }));
 
   const { getFieldDecorator,getFieldsValue, getFieldError, isFieldTouched } = props.form;
-  const handleSubmit = () => {
-    const regInfo = getFieldsValue();
-    alert(JSON.stringify(regInfo))
-  };
 
-  const handleSelectChange = () => {
-    alert(1)
+  const handleSelectChange = (value:string[]) => {
+    console.log(value)
   }
 
   const usernameError = isFieldTouched('username') && getFieldError('username');
   const passwordError = isFieldTouched('age') && getFieldError('age');
   const address = isFieldTouched('address') && getFieldError('address')
-  return (<Form layout="inline" onSubmit={handleSubmit} >
+  return (<Form layout="inline">
     <Form.Item label="姓名" validateStatus={usernameError ? 'error' : ''} help={usernameError || ''}>
       {getFieldDecorator('username', {
         rules: [{ required: true, message: '请输入姓名!' }],
@@ -58,7 +53,7 @@ const MyForm:any = (props: IProps) => {
       )}
     </Form.Item>
     <Form.Item label="标签" style={{width:'100%'}}>
-      {getFieldDecorator('address', {
+      {getFieldDecorator('tags', {
         rules: [{ required: true, message: '请选择标签!' }],
       })(
         <Select
@@ -77,4 +72,4 @@ const MyForm:any = (props: IProps) => {
     </Form.Item>
   </Form>)
 }
-export default Form.create()(MyForm)
+export default  Form.create<IUserFormProps>({})(MyForm);
